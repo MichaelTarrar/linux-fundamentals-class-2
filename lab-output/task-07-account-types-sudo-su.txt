@@ -1,0 +1,80 @@
+
+===== Step 7.1: Identify the current user and the root user =====
+ubuntu@vm:~$ whoami
+ubuntu
+ubuntu@vm:~$ id
+uid=1000(ubuntu) gid=1000(ubuntu) groups=1000(ubuntu),4(adm),20(dialout),24(cdrom),25(floppy),27(sudo),29(audio),30(dip),44(video),46(plugdev)
+ubuntu@vm:~$ id root
+uid=0(root) gid=0(root) groups=0(root)
+
+===== Step 7.2: Compare the three account types =====
+ubuntu@vm:~$ cut -d: -f1,3 /etc/passwd | head -n 5
+root:0
+daemon:1
+bin:2
+sys:3
+sync:4
+ubuntu@vm:~$ getent passwd ubuntu
+ubuntu:x:1000:1000:Ubuntu:/home/ubuntu:/bin/bash
+ubuntu@vm:~$ getent passwd daemon www-data
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+ubuntu@vm:~$ sudo su - www-data
+su: warning: cannot change directory to /var/www: No such file or directory
+This account is currently not available.
+
+===== Step 7.3: Read /etc/passwd =====
+ubuntu@vm:~$ head -n 2 /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+ubuntu@vm:~$ tail -n 1 /etc/passwd
+syslog:x:103:105::/nonexistent:/usr/sbin/nologin
+ubuntu@vm:~$ grep "^ubuntu:" /etc/passwd
+ubuntu:x:1000:1000:Ubuntu:/home/ubuntu:/bin/bash
+
+===== Step 7.4: Read /etc/shadow (restricted) and /etc/group =====
+ubuntu@vm:~$ cat /etc/shadow
+cat: /etc/shadow: Permission denied
+ubuntu@vm:~$ sudo head -n 2 /etc/shadow
+root:!*:20750:0:99999:7:::
+daemon:*:20750:0:99999:7:::
+ubuntu@vm:~$ head -n 3 /etc/group
+root:x:0:
+daemon:x:1:
+bin:x:2:
+ubuntu@vm:~$ getent group sudo
+sudo:x:27:ubuntu
+
+===== Step 7.5: Prepare a recovery plan =====
+ubuntu@vm:~$ sudo cp -p /etc/passwd /tmp/passwd.backup
+ubuntu@vm:~$ ls -l /tmp/passwd.backup
+-rw-r--r-- 1 root root 3382 Nov 21 20:32 /tmp/passwd.backup
+
+===== Step 7.6: Run one command with administrative rights (sudo) =====
+ubuntu@vm:~$ apt update
+Reading package lists... Done
+E: Could not open lock file /var/lib/apt/lists/lock - open (13: Permission denied)
+E: Unable to lock directory /var/lib/apt/lists/
+ubuntu@vm:~$ sudo apt update 2>&1 | tail -n 3
+Building dependency tree...
+Reading state information...
+39 packages can be upgraded. Run 'apt list --upgradable' to see them.
+ubuntu@vm:~$ sudo whoami
+root
+
+===== Step 7.7: Switch accounts with su and sudo -i =====
+ubuntu@vm:~$ su -
+Password:
+su: Authentication failure
+ubuntu@vm:~$ sudo su -
+root@vm:~# whoami
+root
+root@vm:~# pwd
+/root
+root@vm:~# exit
+logout
+ubuntu@vm:~$ sudo -i
+root@vm:~# echo $HOME
+/root
+root@vm:~# exit
+logout

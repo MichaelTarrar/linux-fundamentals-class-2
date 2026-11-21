@@ -1,0 +1,90 @@
+
+===== Step 6.1: Create a 25-line sample log =====
+ubuntu@vm:~$ cd ~/linux_lab
+ubuntu@vm:~/linux_lab$ seq 1 25 | sed 's/^/Log entry /' > logfile.txt
+ubuntu@vm:~/linux_lab$ wc -l logfile.txt
+25 logfile.txt
+
+===== Step 6.2: Display a whole file with cat =====
+ubuntu@vm:~/linux_lab$ cat file1.txt
+This is file1.
+Practicing Linux file management.
+
+===== Step 6.3: Page through a large file with less =====
+ubuntu@vm:~/linux_lab$ less logfile.txt
+# less opened the file one page at a time; Space moved forward and q exited. Screen output is not logged.
+
+===== Step 6.4: Show the start and end of a file with head and tail =====
+ubuntu@vm:~/linux_lab$ head -n 5 logfile.txt
+Log entry 1
+Log entry 2
+Log entry 3
+Log entry 4
+Log entry 5
+ubuntu@vm:~/linux_lab$ tail -n 3 logfile.txt
+Log entry 23
+Log entry 24
+Log entry 25
+ubuntu@vm:~/linux_lab$ head logfile.txt | wc -l
+10
+ubuntu@vm:~/linux_lab$ tail -n 20 logfile.txt | head -n 2
+Log entry 6
+Log entry 7
+
+===== Step 6.5: Monitor a log live with tail -f =====
+# Terminal 1 follows the log in the background; terminal 2 writes a test entry.
+ubuntu@vm:~/linux_lab$ timeout 6 tail -n 0 -f /var/log/syslog &
+ubuntu@vm:~/linux_lab$ sleep 1; logger "Test message from Class 2"
+2026-11-21T20:33:14.805300+05:00 vm ubuntu: Test message from Class 2
+ubuntu@vm:~/linux_lab$ sleep 6
+
+===== Step 6.6: Edit with Nano =====
+ubuntu@vm:~/linux_lab$ nano welcome.txt
+# Nano reported [ Wrote 3 lines ].
+ubuntu@vm:~/linux_lab$ cat welcome.txt
+Welcome to Linux.
+This file was created using Nano.
+Save with Ctrl + O, exit with Ctrl + X.
+
+===== Step 6.7: Edit with Vim and its three modes =====
+ubuntu@vm:~/linux_lab$ sudo apt install -y vim 2>&1 | tail -n 1
+0 upgraded, 0 newly installed, 0 to remove and 39 not upgraded.
+ubuntu@vm:~/linux_lab$ vim vim_notes.txt
+# Pressed i (-- INSERT --), typed the line, Esc, :w (vim: "vim_notes.txt" [New] 1L, 19B written), then :q.
+ubuntu@vm:~/linux_lab$ vim vim_notes.txt
+# Typed temporary, then quit with :q! to discard it.
+ubuntu@vm:~/linux_lab$ cat vim_notes.txt
+Learning Vim modes
+
+===== Step 6.8: Search with find =====
+ubuntu@vm:~/linux_lab$ find /home -name "file1.txt"
+/home/ubuntu/Documents/file1.txt
+/home/ubuntu/linux_lab/backup/file1.txt
+/home/ubuntu/linux_lab/file1.txt
+ubuntu@vm:~/linux_lab$ find /home -type d | head -n 6
+/home
+/home/ubuntu
+/home/ubuntu/Documents
+/home/ubuntu/projects
+/home/ubuntu/linux_lab
+/home/ubuntu/linux_lab/projects
+ubuntu@vm:~/linux_lab$ find /home -name "*.txt"
+/home/ubuntu/Documents/file2.txt
+/home/ubuntu/Documents/notes.txt
+/home/ubuntu/Documents/file1.txt
+/home/ubuntu/linux_lab/logfile.txt
+/home/ubuntu/linux_lab/welcome.txt
+/home/ubuntu/linux_lab/renamed.txt
+/home/ubuntu/linux_lab/vim_notes.txt
+/home/ubuntu/linux_lab/backup/file1_copy.txt
+/home/ubuntu/linux_lab/backup/file1.txt
+/home/ubuntu/linux_lab/file1.txt
+
+===== Step 6.9: Search with locate =====
+ubuntu@vm:~/linux_lab$ sudo apt install -y plocate 2>&1 | tail -n 1
+0 upgraded, 0 newly installed, 0 to remove and 39 not upgraded.
+ubuntu@vm:~/linux_lab$ touch ~/brandnew.txt
+ubuntu@vm:~/linux_lab$ locate brandnew.txt
+ubuntu@vm:~/linux_lab$ sudo updatedb
+ubuntu@vm:~/linux_lab$ locate brandnew.txt
+/home/ubuntu/brandnew.txt

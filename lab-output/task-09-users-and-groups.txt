@@ -1,0 +1,93 @@
+
+===== Step 9.1: Check existing groups =====
+ubuntu@vm:~$ groups
+ubuntu adm dialout cdrom floppy sudo audio dip video plugdev
+ubuntu@vm:~$ id ubuntu
+uid=1000(ubuntu) gid=1000(ubuntu) groups=1000(ubuntu),4(adm),20(dialout),24(cdrom),25(floppy),27(sudo),29(audio),30(dip),44(video),46(plugdev)
+ubuntu@vm:~$ getent group sudo
+sudo:x:27:ubuntu
+
+===== Step 9.2: Lab Step 1 - Create a user =====
+ubuntu@vm:~$ sudo adduser student1
+info: Adding user `student1' ...
+info: Selecting UID/GID from range 1000 to 59999 ...
+info: Adding new group `student1' (1002) ...
+info: Adding new user `student1' (1002) with group `student1 (1002)' ...
+info: Creating home directory `/home/student1' ...
+info: Copying files from `/etc/skel' ...
+New password:
+Retype new password:
+passwd: password updated successfully
+Changing the user information for student1
+Enter the new value, or press ENTER for the default
+	Full Name []:
+	Room Number []:
+	Work Phone []:
+	Home Phone []:
+	Other []:
+Is the information correct? [Y/n] Y
+info: Adding new user `student1' to supplemental / extra groups `users' ...
+info: Adding user `student1' to group `users' ...
+
+===== Step 9.3: Lab Step 2 - Create a group (groupadd) =====
+ubuntu@vm:~$ sudo groupadd developers
+ubuntu@vm:~$ getent group developers
+developers:x:1003:
+
+===== Step 9.4: Lab Steps 3 and 4 - Add a user to the group and verify =====
+ubuntu@vm:~$ sudo usermod -aG developers student1
+ubuntu@vm:~$ id student1
+uid=1002(student1) gid=1002(student1) groups=1002(student1),100(users),1003(developers)
+ubuntu@vm:~$ groups student1
+student1 : student1 users developers
+ubuntu@vm:~$ sudo usermod -aG developers hamza
+ubuntu@vm:~$ getent group developers
+developers:x:1003:student1,hamza
+
+===== Step 9.5: See why -aG matters =====
+ubuntu@vm:~$ sudo usermod -aG users student1
+ubuntu@vm:~$ id student1
+uid=1002(student1) gid=1002(student1) groups=1002(student1),100(users),1003(developers)
+ubuntu@vm:~$ sudo usermod -G developers student1
+ubuntu@vm:~$ id student1
+uid=1002(student1) gid=1002(student1) groups=1002(student1),1003(developers)
+
+===== Step 9.6: Lab Steps 5 and 6 - Change the password and check expiration =====
+ubuntu@vm:~$ sudo passwd student1
+New password:
+Retype new password:
+passwd: password updated successfully
+ubuntu@vm:~$ sudo chage -l student1 | head -n 3
+Last password change					: Nov 21, 2026
+Password expires					: never
+Password inactive					: never
+
+===== Step 9.7: Group membership applies after a new login =====
+ubuntu@vm:~$ sudo usermod -aG developers ubuntu
+ubuntu@vm:~$ groups
+ubuntu adm dialout cdrom floppy sudo audio dip video plugdev
+ubuntu@vm:~$ groups ubuntu
+ubuntu : ubuntu adm dialout cdrom floppy sudo audio dip video plugdev developers
+# Log out and log in again. A new login session for ubuntu:
+ubuntu@vm:~$ sudo su - ubuntu -c groups
+ubuntu adm dialout cdrom floppy sudo audio dip video plugdev developers
+
+===== Step 9.8: Lab Step 7 - Remove a user from a group =====
+ubuntu@vm:~$ sudo gpasswd -d student1 developers
+Removing user student1 from group developers
+ubuntu@vm:~$ groups student1
+student1 : student1
+
+===== Step 9.9: Rename and delete a group (groupmod, groupdel) =====
+ubuntu@vm:~$ sudo groupadd testers
+ubuntu@vm:~$ sudo groupmod -n qa testers
+ubuntu@vm:~$ getent group qa
+qa:x:1004:
+ubuntu@vm:~$ sudo groupdel qa
+ubuntu@vm:~$ getent group qa
+
+===== Checkpoint =====
+ubuntu@vm:~$ getent group developers
+developers:x:1003:hamza,ubuntu
+ubuntu@vm:~$ groups student1
+student1 : student1

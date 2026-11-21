@@ -1,0 +1,87 @@
+
+===== Step 1.1: Find the distribution =====
+ubuntu@vm:~$ cat /etc/os-release
+PRETTY_NAME="Ubuntu 24.04.5 LTS"
+NAME="Ubuntu"
+VERSION_ID="24.04"
+VERSION="24.04.5 LTS (Noble Numbat)"
+VERSION_CODENAME=noble
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=noble
+LOGO=ubuntu-logo
+ubuntu@vm:~$ lsb_release -a
+No LSB modules are available.
+Distributor ID:	Ubuntu
+Description:	Ubuntu 24.04.5 LTS
+Release:	24.04
+Codename:	noble
+
+===== Step 1.2: Find the kernel (the core layer) =====
+ubuntu@vm:~$ uname -r
+6.18.44-fc-v726
+ubuntu@vm:~$ uname -a
+Linux vm 6.18.44-fc-v726 #1 SMP PREEMPT_DYNAMIC @0 x86_64 x86_64 x86_64 GNU/Linux
+
+===== Step 1.3: Inspect the hardware layer =====
+ubuntu@vm:~$ lscpu | head -n 8
+Architecture:                            x86_64
+CPU op-mode(s):                          32-bit, 64-bit
+Address sizes:                           52 bits physical, 57 bits virtual
+Byte Order:                              Little Endian
+CPU(s):                                  2
+On-line CPU(s) list:                     0,1
+Vendor ID:                               GenuineIntel
+Model name:                              Intel(R) Xeon(R) Processor @ 2.10GHz
+ubuntu@vm:~$ free -h
+               total        used        free      shared  buff/cache   available
+Mem:           7.8Gi       552Mi       6.5Gi        12Mi       1.1Gi       7.3Gi
+Swap:             0B          0B          0B
+ubuntu@vm:~$ lsblk | grep -v loop
+NAME  MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
+zram0 253:0    0     0B  0 disk
+vda   254:0    0   256G  0 disk /home
+                                /
+vdb   254:16   0   9.5M  1 disk
+vdc   254:32   0 397.6M  1 disk
+vdd   254:48   0  49.5M  1 disk
+vde   254:64   0   752K  1 disk
+vdf   254:80   0   5.9M  1 disk
+
+===== Step 1.4: Shell, system utilities, libraries and applications =====
+ubuntu@vm:~$ echo $SHELL
+/bin/bash
+ubuntu@vm:~$ bash --version | head -n 1
+GNU bash, version 5.2.21(1)-release (x86_64-pc-linux-gnu)
+ubuntu@vm:~$ which ls
+/usr/bin/ls
+ubuntu@vm:~$ ldd /bin/ls | head -n 3
+	linux-vdso.so.1 (0x00007f1977c2a000)
+	libselinux.so.1 => /lib/x86_64-linux-gnu/libselinux.so.1 (0x00007f1977bc2000)
+	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f1977800000)
+ubuntu@vm:~$ which nano
+/usr/bin/nano
+
+===== Step 1.5: Watch the layers work together =====
+ubuntu@vm:~$ ls /home
+ubuntu
+
+===== Step 1.6: Confirm the key characteristics of Linux =====
+ubuntu@vm:~$ head -n 2 /usr/share/common-licenses/GPL-2
+                    GNU GENERAL PUBLIC LICENSE
+                       Version 2, June 1991
+ubuntu@vm:~$ who
+ubuntu@vm:~$ ps -e | wc -l
+76
+ubuntu@vm:~$ ls -l /etc/shadow
+-rw-r----- 1 root shadow 1401 Nov 21 20:32 /etc/shadow
+ubuntu@vm:~$ uname -m
+x86_64
+
+===== Step 1.7: Compare package managers across distributions =====
+ubuntu@vm:~$ which apt dnf yum
+/usr/bin/apt

@@ -1,0 +1,299 @@
+  1  cat /etc/os-release
+  2  lsb_release -a
+  3  uname -r
+  4  uname -a
+  5  lscpu | head -n 8
+  6  free -h
+  7  lsblk | grep -v loop
+  8  echo $SHELL
+  9  bash --version | head -n 1
+ 10  which ls
+ 11  ldd /bin/ls | head -n 3
+ 12  which nano
+ 13  ls /home
+ 14  head -n 2 /usr/share/common-licenses/GPL-2
+ 15  who
+ 16  ps -e | wc -l
+ 17  ls -l /etc/shadow
+ 18  uname -m
+ 19  which apt dnf yum
+ 20  ls /
+ 21  df -h /
+ 22  findmnt /
+ 23  ls /home
+ 24  echo $HOME
+ 25  sudo ls -ld /root
+ 26  ls /etc | head -n 5
+ 27  ls /var/log | head -n 5
+ 28  ls -ld /bin
+ 29  ls /bin | head -n 5
+ 30  ls /usr
+ 31  ls /boot | head -n 3
+ 32  ls /dev | head -n 3
+ 33  ls -A /mnt
+ 34  ls -ld /tmp
+ 35  ls /opt
+ 36  cd /etc
+ 37  pwd
+ 38  cd /var/log
+ 39  pwd
+ 40  cd
+ 41  pwd
+ 42  tty
+ 43  echo $0
+ 44  echo $SHELL
+ 45  ps -p $$
+ 46  cat /etc/shells
+ 47  mkdir Documents projects
+ 48  touch notes.txt
+ 49  pwd
+ 50  ls
+ 51  whoami
+ 52  ls -l /home
+ 53  LS
+ 54  ls -l /etc/hostname /etc/hosts
+ 55  ls -l -a ~
+ 56  ls -la ~
+ 57  whoami && pwd && date
+ 58  cd ~
+ 59  pwd
+ 60  ls
+ 61  ls -l
+ 62  ls -a
+ 63  sudo ls -lh /var/log/auth.log /var/log/syslog
+ 64  ls -la ~ | head -n 4
+ 65  cd /var/log
+ 66  cd ~
+ 67  pwd
+ 68  cd /
+ 69  pwd
+ 70  cd -
+ 71  pwd
+ 72  cd /var/log
+ 73  cd ..
+ 74  pwd
+ 75  cd .
+ 76  pwd
+ 77  cd /home/ubuntu/Documents    # absolute path
+ 78  pwd
+ 79  cd ..
+ 80  cd Documents                 # relative path
+ 81  pwd
+ 82  cd ../projects               # relative path using the parent directory
+ 83  pwd
+ 84  cd ~
+ 85  cd ../../var/log             # relative path climbing two levels
+ 86  pwd
+ 87  clear
+ 88  history | tail -n 6
+ 89  cd ~
+ 90  mkdir linux_lab
+ 91  cd linux_lab
+ 92  pwd
+ 93  touch file1.txt file2.txt
+ 94  ls
+ 95  ls -l file1.txt
+ 96  sleep 60
+ 97  touch file1.txt
+ 98  ls -l file1.txt
+ 99  mkdir backup
+100  mkdir folder1 folder2 folder3
+101  ls
+102  mkdir projects2/linux/week1
+103  mkdir -p projects/linux/week1
+104  ls -R projects
+105  nano file1.txt
+106  cat file1.txt
+107  cp file1.txt backup/
+108  ls backup
+109  cp file1.txt file1_copy.txt
+110  cp file1.txt file2.txt /home/ubuntu/Documents/
+111  ls /home/ubuntu/Documents
+112  cp projects projects_backup
+113  cp -r projects projects_backup
+114  ls
+115  cat file1.txt
+116  mv file2.txt renamed.txt
+117  mv file1_copy.txt backup/
+118  mv ~/notes.txt ~/Documents/
+119  ls
+120  ls backup
+121  ls ~/Documents
+122  cat file1.txt
+123  find . -name "file1.txt"
+124  touch temp1.txt temp2.txt
+125  rm temp1.txt temp2.txt
+126  rmdir folder1 folder2 folder3
+127  rmdir backup
+128  rm projects_backup
+129  rm -r projects_backup
+130  ls
+131  touch temp3.txt
+132  rm -i temp3.txt
+133  mkdir -p scratch/a/b
+134  ls scratch
+135  rm -rf scratch
+136  ls scratch
+137  ls ~/linux_lab
+138  ls ~/linux_lab/backup
+139  cd ~/linux_lab
+140  seq 1 25 | sed 's/^/Log entry /' > logfile.txt
+141  wc -l logfile.txt
+142  cat file1.txt
+143  less logfile.txt
+144  head -n 5 logfile.txt
+145  tail -n 3 logfile.txt
+146  head logfile.txt | wc -l
+147  tail -n 20 logfile.txt | head -n 2
+148  timeout 6 tail -n 0 -f /var/log/syslog &
+149  sleep 1; logger "Test message from Class 2"
+150  sleep 6
+151  nano welcome.txt
+152  cat welcome.txt
+153  sudo apt install -y vim 2>&1 | tail -n 1
+154  vim vim_notes.txt
+155  vim vim_notes.txt
+156  cat vim_notes.txt
+157  find /home -name "file1.txt"
+158  find /home -type d | head -n 6
+159  find /home -name "*.txt"
+160  sudo apt install -y plocate 2>&1 | tail -n 1
+161  touch ~/brandnew.txt
+162  locate brandnew.txt
+163  sudo updatedb
+164  locate brandnew.txt
+165  whoami
+166  id
+167  id root
+168  cut -d: -f1,3 /etc/passwd | head -n 5
+169  getent passwd ubuntu
+170  getent passwd daemon www-data
+171  sudo su - www-data
+172  head -n 2 /etc/passwd
+173  tail -n 1 /etc/passwd
+174  grep "^ubuntu:" /etc/passwd
+175  cat /etc/shadow
+176  sudo head -n 2 /etc/shadow
+177  head -n 3 /etc/group
+178  getent group sudo
+179  sudo cp -p /etc/passwd /tmp/passwd.backup
+180  ls -l /tmp/passwd.backup
+181  apt update
+182  sudo apt update 2>&1 | tail -n 3
+183  sudo whoami
+184  su -
+185  sudo su -
+186  sudo -i
+187  sudo useradd hamza
+188  getent passwd hamza
+189  id hamza
+190  ls -ld /home/hamza
+191  sudo userdel hamza
+192  sudo useradd -m hamza
+193  ls -ld /home/hamza
+194  ls -A /home/hamza
+195  sudo ls -A /home/hamza
+196  sudo passwd hamza
+197  sudo adduser sara
+198  sudo usermod -s /bin/bash hamza
+199  getent passwd hamza
+200  su - hamza
+201  su - hamza
+202  sudo passwd -l hamza
+203  sudo passwd -S hamza
+204  su - hamza
+205  sudo passwd -u hamza
+206  sudo passwd -S hamza
+207  sudo chage -l hamza
+208  sudo chage -M 90 hamza
+209  sudo chage -l hamza | head -n 3
+210  ps -u sara
+211  sudo find / -xdev -user sara 2>/dev/null | head -n 4
+212  sudo useradd -m tempuser
+213  sudo userdel tempuser
+214  ls -ld /home/tempuser
+215  sudo rm -r /home/tempuser
+216  sudo userdel -r sara
+217  getent passwd sara
+218  ls -d /home/sara
+219  getent passwd hamza
+220  sudo chage -l hamza | grep Maximum
+221  getent passwd sara
+222  groups
+223  id ubuntu
+224  getent group sudo
+225  sudo adduser student1
+226  sudo groupadd developers
+227  getent group developers
+228  sudo usermod -aG developers student1
+229  id student1
+230  groups student1
+231  sudo usermod -aG developers hamza
+232  getent group developers
+233  sudo usermod -aG users student1
+234  id student1
+235  sudo usermod -G developers student1
+236  id student1
+237  sudo passwd student1
+238  sudo chage -l student1 | head -n 3
+239  sudo usermod -aG developers ubuntu
+240  groups
+241  groups ubuntu
+242  sudo su - ubuntu -c groups
+243  sudo gpasswd -d student1 developers
+244  groups student1
+245  sudo groupadd testers
+246  sudo groupmod -n qa testers
+247  getent group qa
+248  sudo groupdel qa
+249  getent group qa
+250  getent group developers
+251  groups student1
+252  mkdir ~/permlab
+253  cd ~/permlab
+254  echo "Linux permissions lab" > notes.txt
+255  echo 'echo "Script is running"' > script.sh
+256  mkdir projects
+257  ls -l
+258  ls -l notes.txt
+259  stat -c '%A %a %U %G %n' notes.txt
+260  cd ~/permlab
+261  ./script.sh
+262  chmod u+x script.sh
+263  ls -l script.sh
+264  ./script.sh
+265  chmod 755 script.sh
+266  chmod 644 notes.txt
+267  ls -l notes.txt script.sh
+268  chmod g+w notes.txt
+269  chmod o-r notes.txt
+270  ls -l notes.txt
+271  stat -c '%A %a %n' notes.txt
+272  chmod u-x projects
+273  cd ~/permlab
+274  cd projects
+275  chmod u+x projects
+276  cd projects
+277  pwd
+278  cd ..
+279  mkdir -p projects/app/src
+280  touch projects/app/src/main.py
+281  chmod -R 755 projects/
+282  ls -lR projects
+283  sudo chown hamza notes.txt
+284  ls -l notes.txt
+285  sudo chown hamza:developers script.sh
+286  ls -l script.sh
+287  sudo chown -R hamza:developers projects/
+288  ls -ld projects projects/app
+289  sudo chgrp developers notes.txt
+290  ls -l notes.txt
+291  sudo chgrp -R developers projects/
+292  sudo mkdir -p /srv/project
+293  sudo chown -R root:developers /srv/project
+294  sudo chmod -R 775 /srv/project
+295  ls -ld /srv/project
+296  touch /srv/project/index.html
+297  sudo -u hamza touch /srv/project/hamza.html
+298  sudo -u student1 touch /srv/project/fail.html
+299  ls -l /srv/project

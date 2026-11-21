@@ -1,0 +1,109 @@
+
+===== Step 5.1: Create a project directory =====
+ubuntu@vm:~$ cd ~
+ubuntu@vm:~$ mkdir linux_lab
+ubuntu@vm:~$ cd linux_lab
+ubuntu@vm:~/linux_lab$ pwd
+/home/ubuntu/linux_lab
+
+===== Step 5.2: Create empty files with touch =====
+ubuntu@vm:~/linux_lab$ touch file1.txt file2.txt
+ubuntu@vm:~/linux_lab$ ls
+file1.txt  file2.txt
+ubuntu@vm:~/linux_lab$ ls -l file1.txt
+-rw-rw-r-- 1 ubuntu ubuntu 0 Nov 21 20:32 file1.txt
+ubuntu@vm:~/linux_lab$ sleep 60
+ubuntu@vm:~/linux_lab$ touch file1.txt
+ubuntu@vm:~/linux_lab$ ls -l file1.txt
+-rw-rw-r-- 1 ubuntu ubuntu 0 Nov 21 20:33 file1.txt
+
+===== Step 5.3: Create directories with mkdir =====
+ubuntu@vm:~/linux_lab$ mkdir backup
+ubuntu@vm:~/linux_lab$ mkdir folder1 folder2 folder3
+ubuntu@vm:~/linux_lab$ ls
+backup	file1.txt  file2.txt  folder1  folder2	folder3
+
+===== Step 5.4: Create nested directories with mkdir -p =====
+ubuntu@vm:~/linux_lab$ mkdir projects2/linux/week1
+mkdir: cannot create directory ‘projects2/linux/week1’: No such file or directory
+ubuntu@vm:~/linux_lab$ mkdir -p projects/linux/week1
+ubuntu@vm:~/linux_lab$ ls -R projects
+projects:
+linux
+
+projects/linux:
+week1
+
+projects/linux/week1:
+
+===== Step 5.5: Add content with Nano =====
+ubuntu@vm:~/linux_lab$ nano file1.txt
+# Typed the two lines, saved with Ctrl + O and Enter, exited with Ctrl + X.
+ubuntu@vm:~/linux_lab$ cat file1.txt
+This is file1.
+Practicing Linux file management.
+
+===== Step 5.6: Copy files and directories with cp =====
+ubuntu@vm:~/linux_lab$ cp file1.txt backup/
+ubuntu@vm:~/linux_lab$ ls backup
+file1.txt
+ubuntu@vm:~/linux_lab$ cp file1.txt file1_copy.txt
+ubuntu@vm:~/linux_lab$ cp file1.txt file2.txt /home/ubuntu/Documents/
+ubuntu@vm:~/linux_lab$ ls /home/ubuntu/Documents
+file1.txt  file2.txt
+ubuntu@vm:~/linux_lab$ cp projects projects_backup
+cp: -r not specified; omitting directory 'projects'
+ubuntu@vm:~/linux_lab$ cp -r projects projects_backup
+ubuntu@vm:~/linux_lab$ ls
+backup	   file1_copy.txt  folder1  folder3   projects_backup
+file1.txt  file2.txt	   folder2  projects
+ubuntu@vm:~/linux_lab$ cat file1.txt
+This is file1.
+Practicing Linux file management.
+
+===== Step 5.7: Rename and move files with mv =====
+ubuntu@vm:~/linux_lab$ mv file2.txt renamed.txt
+ubuntu@vm:~/linux_lab$ mv file1_copy.txt backup/
+ubuntu@vm:~/linux_lab$ mv ~/notes.txt ~/Documents/
+ubuntu@vm:~/linux_lab$ ls
+backup	   folder1  folder3   projects_backup
+file1.txt  folder2  projects  renamed.txt
+ubuntu@vm:~/linux_lab$ ls backup
+file1.txt  file1_copy.txt
+ubuntu@vm:~/linux_lab$ ls ~/Documents
+file1.txt  file2.txt  notes.txt
+
+===== Step 5.8: Display the content and search for the file =====
+ubuntu@vm:~/linux_lab$ cat file1.txt
+This is file1.
+Practicing Linux file management.
+ubuntu@vm:~/linux_lab$ find . -name "file1.txt"
+./backup/file1.txt
+./file1.txt
+
+===== Step 5.9: Delete files and directories safely =====
+ubuntu@vm:~/linux_lab$ touch temp1.txt temp2.txt
+ubuntu@vm:~/linux_lab$ rm temp1.txt temp2.txt
+ubuntu@vm:~/linux_lab$ rmdir folder1 folder2 folder3
+ubuntu@vm:~/linux_lab$ rmdir backup
+rmdir: failed to remove 'backup': Directory not empty
+ubuntu@vm:~/linux_lab$ rm projects_backup
+rm: cannot remove 'projects_backup': Is a directory
+ubuntu@vm:~/linux_lab$ rm -r projects_backup
+ubuntu@vm:~/linux_lab$ ls
+backup	file1.txt  projects  renamed.txt
+ubuntu@vm:~/linux_lab$ touch temp3.txt
+ubuntu@vm:~/linux_lab$ rm -i temp3.txt
+rm: remove regular empty file 'temp3.txt'? y
+ubuntu@vm:~/linux_lab$ mkdir -p scratch/a/b
+ubuntu@vm:~/linux_lab$ ls scratch
+a
+ubuntu@vm:~/linux_lab$ rm -rf scratch
+ubuntu@vm:~/linux_lab$ ls scratch
+ls: cannot access 'scratch': No such file or directory
+
+===== Checkpoint =====
+ubuntu@vm:~/linux_lab$ ls ~/linux_lab
+backup	file1.txt  projects  renamed.txt
+ubuntu@vm:~/linux_lab$ ls ~/linux_lab/backup
+file1.txt  file1_copy.txt

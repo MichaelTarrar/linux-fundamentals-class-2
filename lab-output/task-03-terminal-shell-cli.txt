@@ -1,0 +1,75 @@
+
+===== Step 3.1: Identify your terminal and shell =====
+ubuntu@vm:~$ tty
+/dev/pts/1
+ubuntu@vm:~$ echo $0
+-bash
+ubuntu@vm:~$ echo $SHELL
+/bin/bash
+ubuntu@vm:~$ ps -p $$
+  PID TTY          TIME CMD
+ 6642 pts/1    00:00:00 bash
+
+===== Step 3.2: List the shells installed on the system =====
+ubuntu@vm:~$ cat /etc/shells
+# /etc/shells: valid login shells
+/bin/sh
+/usr/bin/sh
+/bin/bash
+/usr/bin/bash
+/bin/rbash
+/usr/bin/rbash
+/usr/bin/dash
+/usr/bin/tmux
+
+===== Step 3.3: Prepare files, then run pwd, ls and whoami =====
+ubuntu@vm:~$ mkdir Documents projects
+ubuntu@vm:~$ touch notes.txt
+ubuntu@vm:~$ pwd
+/home/ubuntu
+ubuntu@vm:~$ ls
+Documents  notes.txt  projects
+ubuntu@vm:~$ whoami
+ubuntu
+
+===== Step 3.4: Break a command into its three parts =====
+ubuntu@vm:~$ ls -l /home
+total 4
+drwxr-x--- 4 ubuntu ubuntu 4096 Nov 21 20:32 ubuntu
+
+===== Step 3.5: Test the structure rules =====
+ubuntu@vm:~$ LS
+-bash: LS: command not found
+ubuntu@vm:~$ ls -l /etc/hostname /etc/hosts
+-rw-r--r-- 1 root root  3 Nov 21 20:16 /etc/hostname
+-rw-r--r-- 1 root root 81 Nov 21 20:16 /etc/hosts
+ubuntu@vm:~$ ls -l -a ~
+total 32
+drwxr-x--- 4 ubuntu ubuntu 4096 Nov 21 20:32 .
+drwxr-xr-x 3 root   root   4096 Nov 21 20:32 ..
+-rw------- 1 ubuntu ubuntu   46 Nov 21 20:32 .bash_history
+-rw-r--r-- 1 ubuntu ubuntu  220 Mar 31  2024 .bash_logout
+-rw-r--r-- 1 ubuntu ubuntu 3771 Mar 31  2024 .bashrc
+-rw-r--r-- 1 ubuntu ubuntu  807 Mar 31  2024 .profile
+-rw-r--r-- 1 ubuntu ubuntu    0 Nov 21 20:32 .sudo_as_admin_successful
+drwxrwxr-x 2 ubuntu ubuntu 4096 Nov 21 20:32 Documents
+-rw-rw-r-- 1 ubuntu ubuntu    0 Nov 21 20:32 notes.txt
+drwxrwxr-x 2 ubuntu ubuntu 4096 Nov 21 20:32 projects
+ubuntu@vm:~$ ls -la ~
+total 32
+drwxr-x--- 4 ubuntu ubuntu 4096 Nov 21 20:32 .
+drwxr-xr-x 3 root   root   4096 Nov 21 20:32 ..
+-rw------- 1 ubuntu ubuntu   46 Nov 21 20:32 .bash_history
+-rw-r--r-- 1 ubuntu ubuntu  220 Mar 31  2024 .bash_logout
+-rw-r--r-- 1 ubuntu ubuntu 3771 Mar 31  2024 .bashrc
+-rw-r--r-- 1 ubuntu ubuntu  807 Mar 31  2024 .profile
+-rw-r--r-- 1 ubuntu ubuntu    0 Nov 21 20:32 .sudo_as_admin_successful
+drwxrwxr-x 2 ubuntu ubuntu 4096 Nov 21 20:32 Documents
+-rw-rw-r-- 1 ubuntu ubuntu    0 Nov 21 20:32 notes.txt
+drwxrwxr-x 2 ubuntu ubuntu 4096 Nov 21 20:32 projects
+
+===== Step 3.6: Use the CLI to chain administrative tasks =====
+ubuntu@vm:~$ whoami && pwd && date
+ubuntu
+/home/ubuntu
+Sat Nov 21 20:32:12 PKT 2026

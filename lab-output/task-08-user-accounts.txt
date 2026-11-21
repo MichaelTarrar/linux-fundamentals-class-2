@@ -1,0 +1,127 @@
+
+===== Step 8.1: Create a user with useradd =====
+ubuntu@vm:~$ sudo useradd hamza
+ubuntu@vm:~$ getent passwd hamza
+hamza:x:1001:1001::/home/hamza:/bin/sh
+ubuntu@vm:~$ id hamza
+uid=1001(hamza) gid=1001(hamza) groups=1001(hamza)
+ubuntu@vm:~$ ls -ld /home/hamza
+ls: cannot access '/home/hamza': No such file or directory
+
+===== Step 8.2: Recreate the user with a home directory (useradd -m) =====
+ubuntu@vm:~$ sudo userdel hamza
+ubuntu@vm:~$ sudo useradd -m hamza
+ubuntu@vm:~$ ls -ld /home/hamza
+drwxr-x--- 2 hamza hamza 4096 Nov 21 20:33 /home/hamza
+ubuntu@vm:~$ ls -A /home/hamza
+ls: cannot open directory '/home/hamza': Permission denied
+# The new home is drwxr-x--- (750), so ubuntu needs sudo to look inside:
+ubuntu@vm:~$ sudo ls -A /home/hamza
+.bash_logout  .bashrc  .profile
+
+===== Step 8.3: Set the password =====
+ubuntu@vm:~$ sudo passwd hamza
+New password:
+Retype new password:
+passwd: password updated successfully
+
+===== Step 8.4: Create a user with adduser =====
+ubuntu@vm:~$ sudo adduser sara
+info: Adding user `sara' ...
+info: Selecting UID/GID from range 1000 to 59999 ...
+info: Adding new group `sara' (1002) ...
+info: Adding new user `sara' (1002) with group `sara (1002)' ...
+info: Creating home directory `/home/sara' ...
+info: Copying files from `/etc/skel' ...
+New password:
+Retype new password:
+passwd: password updated successfully
+Changing the user information for sara
+Enter the new value, or press ENTER for the default
+	Full Name []: Sara Ali
+	Room Number []:
+	Work Phone []:
+	Home Phone []:
+	Other []:
+Is the information correct? [Y/n] Y
+info: Adding new user `sara' to supplemental / extra groups `users' ...
+info: Adding user `sara' to group `users' ...
+
+===== Step 8.5: Modify a user with usermod =====
+ubuntu@vm:~$ sudo usermod -s /bin/bash hamza
+ubuntu@vm:~$ getent passwd hamza
+hamza:x:1001:1001::/home/hamza:/bin/bash
+
+===== Step 8.6: Switch to the new user with su - hamza =====
+ubuntu@vm:~$ su - hamza
+Password:
+hamza@vm:~$ whoami
+hamza
+hamza@vm:~$ pwd
+/home/hamza
+hamza@vm:~$ exit
+logout
+
+===== Step 8.7: Change, lock and unlock passwords with passwd =====
+ubuntu@vm:~$ su - hamza
+Password:
+hamza@vm:~$ passwd
+Changing password for hamza.
+Current password:
+New password:
+Retype new password:
+passwd: password updated successfully
+hamza@vm:~$ exit
+logout
+ubuntu@vm:~$ sudo passwd -l hamza
+passwd: password changed.
+ubuntu@vm:~$ sudo passwd -S hamza
+hamza L 2026-11-21 0 99999 7 -1
+ubuntu@vm:~$ su - hamza
+Password:
+su: Authentication failure
+ubuntu@vm:~$ sudo passwd -u hamza
+passwd: password changed.
+ubuntu@vm:~$ sudo passwd -S hamza
+hamza P 2026-11-21 0 99999 7 -1
+
+===== Step 8.8: Apply a password expiry policy with chage =====
+ubuntu@vm:~$ sudo chage -l hamza
+Last password change					: Nov 21, 2026
+Password expires					: never
+Password inactive					: never
+Account expires						: never
+Minimum number of days between password change		: 0
+Maximum number of days between password change		: 99999
+Number of days of warning before password expires	: 7
+ubuntu@vm:~$ sudo chage -M 90 hamza
+ubuntu@vm:~$ sudo chage -l hamza | head -n 3
+Last password change					: Nov 21, 2026
+Password expires					: Feb 19, 2027
+Password inactive					: never
+
+===== Step 8.9: Delete a user safely with userdel =====
+ubuntu@vm:~$ ps -u sara
+  PID TTY          TIME CMD
+ubuntu@vm:~$ sudo find / -xdev -user sara 2>/dev/null | head -n 4
+/home/sara
+/home/sara/.bashrc
+/home/sara/.bash_logout
+/home/sara/.profile
+ubuntu@vm:~$ sudo useradd -m tempuser
+ubuntu@vm:~$ sudo userdel tempuser
+ubuntu@vm:~$ ls -ld /home/tempuser
+drwxr-x--- 2 1003 1003 4096 Nov 21 20:33 /home/tempuser
+ubuntu@vm:~$ sudo rm -r /home/tempuser
+ubuntu@vm:~$ sudo userdel -r sara
+userdel: sara mail spool (/var/mail/sara) not found
+ubuntu@vm:~$ getent passwd sara
+ubuntu@vm:~$ ls -d /home/sara
+ls: cannot access '/home/sara': No such file or directory
+
+===== Checkpoint =====
+ubuntu@vm:~$ getent passwd hamza
+hamza:x:1001:1001::/home/hamza:/bin/bash
+ubuntu@vm:~$ sudo chage -l hamza | grep Maximum
+Maximum number of days between password change		: 90
+ubuntu@vm:~$ getent passwd sara

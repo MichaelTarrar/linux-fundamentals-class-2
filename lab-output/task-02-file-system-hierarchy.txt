@@ -1,0 +1,74 @@
+
+===== Step 2.1: List the root directory =====
+ubuntu@vm:~$ ls /
+bin		     home		mnt	  run		      usr
+bin.usr-is-merged    lib		nix	  sbin		      var
+boot		     lib.usr-is-merged	old_root  sbin.usr-is-merged
+container_info.json  lib64		opt	  srv
+dev		     lost+found		proc	  sys
+etc		     media		root	  tmp
+
+===== Step 2.2: Prove that storage is mounted inside the tree =====
+ubuntu@vm:~$ df -h /
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/vda        252G   13G   30G  30% /
+ubuntu@vm:~$ findmnt /
+TARGET SOURCE FSTYPE OPTIONS
+/      /dev/vda
+              ext4   rw,relatime,discard,no_prefetch_block_bitmaps,resv_strict,r
+
+===== Step 2.3: Visit /home and /root =====
+ubuntu@vm:~$ ls /home
+ubuntu
+ubuntu@vm:~$ echo $HOME
+/home/ubuntu
+ubuntu@vm:~$ sudo ls -ld /root
+drwx------ 16 root root 4096 Nov 21 20:23 /root
+
+===== Step 2.4: Visit /etc and /var =====
+ubuntu@vm:~$ ls /etc | head -n 5
+ImageMagick-6
+LatexMk
+PackageKit
+X11
+adduser.conf
+ubuntu@vm:~$ ls /var/log | head -n 5
+README
+alternatives.log
+apt
+auth.log
+bootstrap.log
+
+===== Step 2.5: Visit /bin and /usr =====
+ubuntu@vm:~$ ls -ld /bin
+lrwxrwxrwx 1 root root 7 Apr 22  2024 /bin -> usr/bin
+ubuntu@vm:~$ ls /bin | head -n 5
+2to3-3.11
+X11
+Xvfb
+[
+aclocal
+ubuntu@vm:~$ ls /usr
+bin  games  include  lib  lib64  libexec  local  sbin  share  src
+
+===== Step 2.6: Visit /boot, /dev, /tmp, /mnt and /opt =====
+ubuntu@vm:~$ ls /boot | head -n 3
+ubuntu@vm:~$ ls /dev | head -n 3
+autofs
+btrfs-control
+console
+ubuntu@vm:~$ ls -A /mnt
+ubuntu@vm:~$ ls -ld /tmp
+drwxrwxrwt 11 root root 4096 Nov 21 20:31 /tmp
+ubuntu@vm:~$ ls /opt
+
+===== Step 2.7: Follow the slide's practical example =====
+ubuntu@vm:~$ cd /etc
+ubuntu@vm:/etc$ pwd
+/etc
+ubuntu@vm:/etc$ cd /var/log
+ubuntu@vm:/var/log$ pwd
+/var/log
+ubuntu@vm:/var/log$ cd
+ubuntu@vm:~$ pwd
+/home/ubuntu

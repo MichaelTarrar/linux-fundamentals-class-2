@@ -1,0 +1,78 @@
+
+===== Step 4.1: Identify the current location (pwd) =====
+ubuntu@vm:~$ cd ~
+ubuntu@vm:~$ pwd
+/home/ubuntu
+
+===== Step 4.2: List directory contents (ls and its options) =====
+ubuntu@vm:~$ ls
+Documents  notes.txt  projects
+ubuntu@vm:~$ ls -l
+total 8
+drwxrwxr-x 2 ubuntu ubuntu 4096 Nov 21 20:32 Documents
+-rw-rw-r-- 1 ubuntu ubuntu    0 Nov 21 20:32 notes.txt
+drwxrwxr-x 2 ubuntu ubuntu 4096 Nov 21 20:32 projects
+ubuntu@vm:~$ ls -a
+.   .bash_history  .bashrc   .sudo_as_admin_successful	notes.txt
+..  .bash_logout   .profile  Documents			projects
+ubuntu@vm:~$ sudo ls -lh /var/log/auth.log /var/log/syslog
+-rw-r----- 1 syslog adm 278K Nov 21 20:32 /var/log/auth.log
+-rw-r----- 1 syslog adm 6.7K Nov 21 20:31 /var/log/syslog
+ubuntu@vm:~$ ls -la ~ | head -n 4
+total 32
+drwxr-x--- 4 ubuntu ubuntu 4096 Nov 21 20:32 .
+drwxr-xr-x 3 root   root   4096 Nov 21 20:32 ..
+-rw------- 1 ubuntu ubuntu   46 Nov 21 20:32 .bash_history
+
+===== Step 4.3: Navigate to the home directory (cd ~) =====
+ubuntu@vm:~$ cd /var/log
+ubuntu@vm:/var/log$ cd ~
+ubuntu@vm:~$ pwd
+/home/ubuntu
+
+===== Step 4.4: Navigate to the root directory (cd /) =====
+ubuntu@vm:~$ cd /
+ubuntu@vm:/$ pwd
+/
+
+===== Step 4.5: Return to the previous directory (cd -) =====
+ubuntu@vm:/$ cd -
+/home/ubuntu
+ubuntu@vm:~$ pwd
+/home/ubuntu
+
+===== Step 4.6: Use the parent and current directory symbols =====
+ubuntu@vm:~$ cd /var/log
+ubuntu@vm:/var/log$ cd ..
+ubuntu@vm:/var$ pwd
+/var
+ubuntu@vm:/var$ cd .
+ubuntu@vm:/var$ pwd
+/var
+
+===== Step 4.7: Compare absolute and relative paths =====
+ubuntu@vm:/var$ cd /home/ubuntu/Documents    # absolute path
+ubuntu@vm:~/Documents$ pwd
+/home/ubuntu/Documents
+ubuntu@vm:~/Documents$ cd ..
+ubuntu@vm:~$ cd Documents                 # relative path
+ubuntu@vm:~/Documents$ pwd
+/home/ubuntu/Documents
+ubuntu@vm:~/Documents$ cd ../projects               # relative path using the parent directory
+ubuntu@vm:~/projects$ pwd
+/home/ubuntu/projects
+ubuntu@vm:~/projects$ cd ~
+ubuntu@vm:~$ cd ../../var/log             # relative path climbing two levels
+ubuntu@vm:/var/log$ pwd
+/var/log
+
+===== Step 4.8: Clear the screen and view command history =====
+ubuntu@vm:/var/log$ clear
+# clear wipes the screen and prints nothing.
+ubuntu@vm:/var/log$ history | tail -n 6
+   34  pwd
+   35  cd ~
+   36  cd ../../var/log             # relative path climbing two levels
+   37  pwd
+   38  clear
+   39  history | tail -n 6

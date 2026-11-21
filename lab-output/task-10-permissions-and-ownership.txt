@@ -1,0 +1,98 @@
+
+===== Step 10.1: Prepare the lab files =====
+ubuntu@vm:~$ mkdir ~/permlab
+ubuntu@vm:~$ cd ~/permlab
+ubuntu@vm:~/permlab$ echo "Linux permissions lab" > notes.txt
+ubuntu@vm:~/permlab$ echo 'echo "Script is running"' > script.sh
+ubuntu@vm:~/permlab$ mkdir projects
+ubuntu@vm:~/permlab$ ls -l
+total 12
+-rw-rw-r-- 1 ubuntu ubuntu   22 Nov 21 20:33 notes.txt
+drwxrwxr-x 2 ubuntu ubuntu 4096 Nov 21 20:33 projects
+-rw-rw-r-- 1 ubuntu ubuntu   25 Nov 21 20:33 script.sh
+
+===== Step 10.2: Read the ownership and permission string =====
+ubuntu@vm:~/permlab$ ls -l notes.txt
+-rw-rw-r-- 1 ubuntu ubuntu 22 Nov 21 20:33 notes.txt
+ubuntu@vm:~/permlab$ stat -c '%A %a %U %G %n' notes.txt
+-rw-rw-r-- 664 ubuntu ubuntu notes.txt
+
+===== Step 10.4: Change permissions with chmod =====
+ubuntu@vm:~/permlab$ cd ~/permlab
+ubuntu@vm:~/permlab$ ./script.sh
+-bash: ./script.sh: Permission denied
+ubuntu@vm:~/permlab$ chmod u+x script.sh
+ubuntu@vm:~/permlab$ ls -l script.sh
+-rwxrw-r-- 1 ubuntu ubuntu 25 Nov 21 20:33 script.sh
+ubuntu@vm:~/permlab$ ./script.sh
+Script is running
+ubuntu@vm:~/permlab$ chmod 755 script.sh
+ubuntu@vm:~/permlab$ chmod 644 notes.txt
+ubuntu@vm:~/permlab$ ls -l notes.txt script.sh
+-rw-r--r-- 1 ubuntu ubuntu 22 Nov 21 20:33 notes.txt
+-rwxr-xr-x 1 ubuntu ubuntu 25 Nov 21 20:33 script.sh
+ubuntu@vm:~/permlab$ chmod g+w notes.txt
+ubuntu@vm:~/permlab$ chmod o-r notes.txt
+ubuntu@vm:~/permlab$ ls -l notes.txt
+-rw-rw---- 1 ubuntu ubuntu 22 Nov 21 20:33 notes.txt
+ubuntu@vm:~/permlab$ stat -c '%A %a %n' notes.txt
+-rw-rw---- 660 notes.txt
+ubuntu@vm:~/permlab$ chmod u-x projects
+ubuntu@vm:~/permlab$ cd ~/permlab
+ubuntu@vm:~/permlab$ cd projects
+-bash: cd: projects: Permission denied
+ubuntu@vm:~/permlab$ chmod u+x projects
+ubuntu@vm:~/permlab$ cd projects
+ubuntu@vm:~/permlab/projects$ pwd
+/home/ubuntu/permlab/projects
+ubuntu@vm:~/permlab/projects$ cd ..
+
+===== Step 10.5: Change permissions recursively (chmod -R) =====
+ubuntu@vm:~/permlab$ mkdir -p projects/app/src
+ubuntu@vm:~/permlab$ touch projects/app/src/main.py
+ubuntu@vm:~/permlab$ chmod -R 755 projects/
+ubuntu@vm:~/permlab$ ls -lR projects
+projects:
+total 4
+drwxr-xr-x 3 ubuntu ubuntu 4096 Nov 21 20:33 app
+
+projects/app:
+total 4
+drwxr-xr-x 2 ubuntu ubuntu 4096 Nov 21 20:33 src
+
+projects/app/src:
+total 0
+-rwxr-xr-x 1 ubuntu ubuntu 0 Nov 21 20:33 main.py
+
+===== Step 10.6: Change the owner with chown =====
+ubuntu@vm:~/permlab$ sudo chown hamza notes.txt
+ubuntu@vm:~/permlab$ ls -l notes.txt
+-rw-rw---- 1 hamza ubuntu 22 Nov 21 20:33 notes.txt
+ubuntu@vm:~/permlab$ sudo chown hamza:developers script.sh
+ubuntu@vm:~/permlab$ ls -l script.sh
+-rwxr-xr-x 1 hamza developers 25 Nov 21 20:33 script.sh
+ubuntu@vm:~/permlab$ sudo chown -R hamza:developers projects/
+ubuntu@vm:~/permlab$ ls -ld projects projects/app
+drwxr-xr-x 3 hamza developers 4096 Nov 21 20:33 projects
+drwxr-xr-x 3 hamza developers 4096 Nov 21 20:33 projects/app
+
+===== Step 10.7: Change the group with chgrp =====
+ubuntu@vm:~/permlab$ sudo chgrp developers notes.txt
+ubuntu@vm:~/permlab$ ls -l notes.txt
+-rw-rw---- 1 hamza developers 22 Nov 21 20:33 notes.txt
+ubuntu@vm:~/permlab$ sudo chgrp -R developers projects/
+
+===== Step 10.8: Real-world example - a shared directory for developers =====
+ubuntu@vm:~/permlab$ sudo mkdir -p /srv/project
+ubuntu@vm:~/permlab$ sudo chown -R root:developers /srv/project
+ubuntu@vm:~/permlab$ sudo chmod -R 775 /srv/project
+ubuntu@vm:~/permlab$ ls -ld /srv/project
+drwxrwxr-x 2 root developers 4096 Nov 21 20:33 /srv/project
+ubuntu@vm:~/permlab$ touch /srv/project/index.html
+ubuntu@vm:~/permlab$ sudo -u hamza touch /srv/project/hamza.html
+ubuntu@vm:~/permlab$ sudo -u student1 touch /srv/project/fail.html
+touch: cannot touch '/srv/project/fail.html': Permission denied
+ubuntu@vm:~/permlab$ ls -l /srv/project
+total 0
+-rw-rw-r-- 1 hamza  hamza  0 Nov 21 20:33 hamza.html
+-rw-rw-r-- 1 ubuntu ubuntu 0 Nov 21 20:33 index.html
